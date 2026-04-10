@@ -2,68 +2,47 @@ name: Wake Up Streamlit Apps
 
 on:
   schedule:
-    - cron: '0 */3 * * *' # 3시간마다 더 자주 깨우도록 변경
+    - cron: '0 */3 * * *'
   workflow_dispatch:
-
-env:
-  # Node.js 20 경고를 해결하기 위한 설정 (2026년 기준)
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   wake_up:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Install Selenium
-        run: |
-          pip install selenium webdriver-manager
-
-      - name: Wake Up Apps
+      - name: Wake Up Apps via HTTP Direct Hit
         run: |
           python - <<EOF
-          from selenium import webdriver
-          from selenium.webdriver.chrome.options import Options
-          from selenium.webdriver.chrome.service import Service
-          from webdriver_manager.chrome import ChromeDriverManager
+          import requests
           import time
 
-          # 깨우고 싶은 앱 URL 리스트 (여기에 다 넣어주세요)
+          # 깨우고 싶은 앱 URL 리스트
           apps = [
-              "https://style-scan-vip1.streamlit.app/",
-              "https://bw-chef.streamlit.app/",
-              "https://microbiome-ai-lab.streamlit.app/",
-              "https://chef-noir.streamlit.app/",
               "https://stylescan-ai.streamlit.app/",
-              "https://longevity-os.streamlit.app/",
-              "https://misatech-surop.streamlit.app/"
+              "https://chef-noir-ai.streamlit.app/",
+              "https://longevity-os.streamlit.app/"
           ]
 
-          chrome_options = Options()
-          chrome_options.add_argument("--headless")
-          chrome_options.add_argument("--no-sandbox")
-          chrome_options.add_argument("--disable-dev-shm-usage")
-          # 실제 브라우저처럼 보이기 위한 유저 에이전트 추가
-          chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-
-          driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+          headers = {
+              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+          }
 
           for app in apps:
-              print(f"--- Waking up: {app} ---")
+              print(f"--- Target: {app} ---")
               try:
-                  driver.get(app)
-                  # 60초 대기: 깊은 잠에 빠진 앱이 완전히 로딩될 때까지 기다려줍니다.
-                  print("Waiting 60 seconds for the app to initialize...")
-                  time.sleep(60) 
-                  print(f"Successfully touched {app}")
+                  # 1단계: 접속 시도
+                  response = requests.get(app, headers=headers, timeout=30)
+                  print(f"Step 1 (Connect): Status Code {response.status_code}")
+                  
+                  # 2단계: 서버가 기지개를 켤 수 있도록 30초 동안 5초 간격으로 계속 노크
+                  print("Step 2: Sending keep-alive pulses for 30 seconds...")
+                  for i in range(6):
+                      time.sleep(5)
+                      requests.get(app, headers=headers, timeout=10)
+                      print(f"   Pulse {i+1} sent...")
+                  
+                  print(f"Successfully signaled {app}")
               except Exception as e:
-                  print(f"Failed to wake {app}: {e}")
+                  print(f"Failed to reach {app}: {e}")
 
-          driver.quit()
+          print("--- All tasks completed ---")
           EOF
