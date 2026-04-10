@@ -1,21 +1,20 @@
-name: Wake Up Streamlit Apps
+name: Wake Up Apps
 
 on:
-  schedule:
-    - cron: '0 */3 * * *'
-  workflow_dispatch:
+  workflow_dispatch: # 수동 실행용
 
 jobs:
   wake_up:
     runs-on: ubuntu-latest
     steps:
-      - name: Wake Up Apps via HTTP Direct Hit
+      - name: 1. Start Signal
+        run: echo "Starting the wake-up process for 형님's apps..."
+
+      - name: 2. Main Execution
         run: |
           python - <<EOF
           import requests
           import time
-
-          # 깨우고 싶은 앱 URL 리스트
           apps = [
               "https://style-scan-vip1.streamlit.app/",
               "https://bw-chef.streamlit.app/",
@@ -25,28 +24,15 @@ jobs:
               "https://longevity-os.streamlit.app/",
               "https://misatech-surop.streamlit.app/"
           ]
-
-          headers = {
-              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-          }
-
           for app in apps:
-              print(f"--- Target: {app} ---")
+              print(f"--- Waking up: {app} ---")
               try:
-                  # 1단계: 접속 시도
-                  response = requests.get(app, headers=headers, timeout=30)
-                  print(f"Step 1 (Connect): Status Code {response.status_code}")
-                  
-                  # 2단계: 서버가 기지개를 켤 수 있도록 30초 동안 5초 간격으로 계속 노크
-                  print("Step 2: Sending keep-alive pulses for 30 seconds...")
-                  for i in range(6):
-                      time.sleep(5)
-                      requests.get(app, headers=headers, timeout=10)
-                      print(f"   Pulse {i+1} sent...")
-                  
-                  print(f"Successfully signaled {app}")
-              except Exception as e:
-                  print(f"Failed to reach {app}: {e}")
-
-          print("--- All tasks completed ---")
+                  r = requests.get(app, timeout=20)
+                  print(f"Status: {r.status_code}")
+                  time.sleep(5) # 짧게 노크
+              except:
+                  print(f"Error on {app}")
           EOF
+
+      - name: 3. Finish Signal
+        run: echo "All done!"
