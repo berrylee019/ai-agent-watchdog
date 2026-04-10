@@ -21,12 +21,13 @@ jobs:
         run: |
           pip install selenium webdriver-manager
 
-      - name: Real Browser Access
+      - name: Force Wake Up with Button Click
         run: |
           python - <<EOF
           from selenium import webdriver
           from selenium.webdriver.chrome.options import Options
           from selenium.webdriver.chrome.service import Service
+          from selenium.webdriver.common.by import By
           from webdriver_manager.chrome import ChromeDriverManager
           import time
 
@@ -41,7 +42,7 @@ jobs:
           ]
 
           options = Options()
-          options.add_argument("--headless") # 화면 없이 실행
+          options.add_argument("--headless")
           options.add_argument("--no-sandbox")
           options.add_argument("--disable-dev-shm-usage")
           options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
@@ -49,14 +50,24 @@ jobs:
           driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
           for app in apps:
-              print(f"--- 🚀 Browser Visiting: {app} ---")
+              print(f"--- 🚨 Force Waking: {app} ---")
               try:
                   driver.get(app)
-                  # 서버가 기지개를 켤 수 있게 브라우저를 켠 상태로 30초 대기
-                  time.sleep(30)
-                  print(f"Successfully rendered {app}")
+                  time.sleep(10) # 페이지 로딩 대기
+                  
+                  # "Yes, get this app back up!" 버튼 찾기 (여러가지 케이스 대비)
+                  buttons = driver.find_elements(By.XPATH, "//button[contains(text(), 'Yes')]")
+                  if buttons:
+                      buttons[0].click()
+                      print("   👉 Found the button and CLICKED it!")
+                      time.sleep(40) # 클릭 후 서버가 올라올 때까지 충분히 대기
+                  else:
+                      print("   ✅ App is already awake or button not found. Waiting 30s...")
+                      time.sleep(30)
+                      
+                  print(f"--- Done with {app} ---")
               except Exception as e:
-                  print(f"Failed: {e}")
+                  print(f"❌ Error on {app}: {e}")
 
           driver.quit()
           EOF
