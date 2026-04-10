@@ -1,6 +1,19 @@
-import requests
-          import time
+name: Wake Up Apps
 
+on:
+  workflow_dispatch: # 이 문구가 있어야 'Run workflow' 버튼이 생깁니다!
+  schedule:
+    - cron: '0 */3 * * *'
+
+jobs:
+  wake_up:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Waking Script
+        run: |
+          python - <<EOF
+          import requests
+          import time
           apps = [
               "https://style-scan-vip1.streamlit.app/",
               "https://bw-chef.streamlit.app/",
@@ -10,15 +23,13 @@ import requests
               "https://longevity-os.streamlit.app/",
               "https://misatech-surop.streamlit.app/"
           ]
-
           for app in apps:
-              print(f"--- 🚨 Intensive Waking: {app} ---")
+              print(f"Target: {app}")
               try:
-                  # 60초 동안 10초 간격으로 6번 연속 노크
-                  for i in range(6):
-                      r = requests.get(app, timeout=30)
-                      print(f"   [{i+1}/6] Status: {r.status_code} - Waiting for server boot...")
-                      time.sleep(10) 
-                  print(f"✅ Finished signaling {app}")
-              except Exception as e:
-                  print(f"❌ Error on {app}: {e}")
+                  for i in range(3): # 3번씩 강하게 노크
+                      r = requests.get(app, timeout=20)
+                      print(f"   Signal {i+1} sent (Status: {r.status_code})")
+                      time.sleep(5)
+              except:
+                  print(f"Error on {app}")
+          EOF
