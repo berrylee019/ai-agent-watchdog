@@ -1,20 +1,6 @@
-name: Wake Up Apps
-
-on:
-  workflow_dispatch: # 수동 실행용
-
-jobs:
-  wake_up:
-    runs-on: ubuntu-latest
-    steps:
-      - name: 1. Start Signal
-        run: echo "Starting the wake-up process for 형님's apps..."
-
-      - name: 2. Main Execution
-        run: |
-          python - <<EOF
-          import requests
+import requests
           import time
+
           apps = [
               "https://style-scan-vip1.streamlit.app/",
               "https://bw-chef.streamlit.app/",
@@ -24,15 +10,15 @@ jobs:
               "https://longevity-os.streamlit.app/",
               "https://misatech-surop.streamlit.app/"
           ]
-          for app in apps:
-              print(f"--- Waking up: {app} ---")
-              try:
-                  r = requests.get(app, timeout=20)
-                  print(f"Status: {r.status_code}")
-                  time.sleep(5) # 짧게 노크
-              except:
-                  print(f"Error on {app}")
-          EOF
 
-      - name: 3. Finish Signal
-        run: echo "All done!"
+          for app in apps:
+              print(f"--- 🚨 Intensive Waking: {app} ---")
+              try:
+                  # 60초 동안 10초 간격으로 6번 연속 노크
+                  for i in range(6):
+                      r = requests.get(app, timeout=30)
+                      print(f"   [{i+1}/6] Status: {r.status_code} - Waiting for server boot...")
+                      time.sleep(10) 
+                  print(f"✅ Finished signaling {app}")
+              except Exception as e:
+                  print(f"❌ Error on {app}: {e}")
