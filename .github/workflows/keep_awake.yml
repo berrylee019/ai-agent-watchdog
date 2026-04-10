@@ -38,7 +38,8 @@ jobs:
               "https://chef-noir.streamlit.app/",
               "https://stylescan-ai.streamlit.app/",
               "https://longevity-os.streamlit.app/",
-              "https://misatech-surop.streamlit.app/"
+              "https://misatech-surop.streamlit.app/",
+              "https://robot-control.streamlit.app/"
           ]
 
           options = Options()
