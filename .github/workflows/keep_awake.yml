@@ -17,9 +17,13 @@ jobs:
 
           # 깨우고 싶은 앱 URL 리스트
           apps = [
+              "https://style-scan-vip1.streamlit.app/",
+              "https://bw-chef.streamlit.app/",
+              "https://microbiome-ai-lab.streamlit.app/",
+              "https://chef-noir.streamlit.app/",
               "https://stylescan-ai.streamlit.app/",
-              "https://chef-noir-ai.streamlit.app/",
-              "https://longevity-os.streamlit.app/"
+              "https://longevity-os.streamlit.app/",
+              "https://misatech-surop.streamlit.app/"
           ]
 
           headers = {
