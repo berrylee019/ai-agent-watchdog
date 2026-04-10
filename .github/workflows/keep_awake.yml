@@ -1,7 +1,7 @@
 name: Wake Up Apps
 
 on:
-  workflow_dispatch: # 이 문구가 있어야 'Run workflow' 버튼이 생깁니다!
+  workflow_dispatch:
   schedule:
     - cron: '0 */3 * * *'
 
@@ -9,11 +9,27 @@ jobs:
   wake_up:
     runs-on: ubuntu-latest
     steps:
-      - name: Run Waking Script
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Chrome and Drivers
+        run: |
+          pip install selenium webdriver-manager
+
+      - name: Real Browser Access
         run: |
           python - <<EOF
-          import requests
+          from selenium import webdriver
+          from selenium.webdriver.chrome.options import Options
+          from selenium.webdriver.chrome.service import Service
+          from webdriver_manager.chrome import ChromeDriverManager
           import time
+
           apps = [
               "https://style-scan-vip1.streamlit.app/",
               "https://bw-chef.streamlit.app/",
@@ -23,13 +39,24 @@ jobs:
               "https://longevity-os.streamlit.app/",
               "https://misatech-surop.streamlit.app/"
           ]
+
+          options = Options()
+          options.add_argument("--headless") # 화면 없이 실행
+          options.add_argument("--no-sandbox")
+          options.add_argument("--disable-dev-shm-usage")
+          options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+
+          driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+
           for app in apps:
-              print(f"Target: {app}")
+              print(f"--- 🚀 Browser Visiting: {app} ---")
               try:
-                  for i in range(3): # 3번씩 강하게 노크
-                      r = requests.get(app, timeout=20)
-                      print(f"   Signal {i+1} sent (Status: {r.status_code})")
-                      time.sleep(5)
-              except:
-                  print(f"Error on {app}")
+                  driver.get(app)
+                  # 서버가 기지개를 켤 수 있게 브라우저를 켠 상태로 30초 대기
+                  time.sleep(30)
+                  print(f"Successfully rendered {app}")
+              except Exception as e:
+                  print(f"Failed: {e}")
+
+          driver.quit()
           EOF
