@@ -39,7 +39,8 @@ jobs:
               "https://stylescan-ai.streamlit.app/",
               "https://longevity-os.streamlit.app/",
               "https://misatech-surop.streamlit.app/",
-              "https://robot-control.streamlit.app/"
+              "https://robot-control.streamlit.app/",
+              "https://space-ops.streamlit.app/"
           ]
 
           options = Options()
