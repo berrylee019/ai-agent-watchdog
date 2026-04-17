@@ -40,7 +40,9 @@ jobs:
               "https://longevity-os.streamlit.app/",
               "https://misatech-surop.streamlit.app/",
               "https://robot-control.streamlit.app/",
-              "https://space-ops.streamlit.app/"
+              "https://space-ops.streamlit.app/",
+              "https://dorivac-optimizer.streamlit.app/",
+              "https://gilead-clinical-ai.streamlit.app/"
           ]
 
           options = Options()
