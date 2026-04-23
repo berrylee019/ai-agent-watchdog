@@ -44,7 +44,8 @@ jobs:
               "https://dorivac-optimizer.streamlit.app/",
               "https://gilead-clinical-ai.streamlit.app/",
               "https://pet-longevity-ai.streamlit.app/",
-              "https://pet-longevity.streamlit.app/"
+              "https://pet-longevity.streamlit.app/",
+              "https://oncolytic-virus.streamlit.app/"
           ]
 
           options = Options()
