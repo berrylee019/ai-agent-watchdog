@@ -30,7 +30,7 @@ jobs:
           from selenium.webdriver.common.by import By
           from webdriver_manager.chrome import ChromeDriverManager
           import time
-
+          
           apps = [
               "https://style-scan-vip1.streamlit.app/",
               "https://bw-chef.streamlit.app/",
