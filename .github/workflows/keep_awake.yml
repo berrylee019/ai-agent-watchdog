@@ -46,7 +46,7 @@ jobs:
               "https://pet-longevity-ai.streamlit.app/",
               "https://pet-longevity.streamlit.app/",
               "https://oncolytic-virus.streamlit.app/",
-              "https://anti-turtle-neck-ai.streamlit.app/
+              "https://anti-turtle-neck-ai.streamlit.app/"
           ]
 
           options = Options()
