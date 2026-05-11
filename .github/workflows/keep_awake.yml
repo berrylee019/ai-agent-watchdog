@@ -8,6 +8,10 @@ on:
 jobs:
   wake_up:
     runs-on: ubuntu-latest
+    # Node.js 24 환경을 강제 적용하여 경고 해결
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -17,7 +21,7 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install Chrome and Drivers
+      - name: Install Dependencies
         run: |
           pip install selenium webdriver-manager
 
@@ -30,7 +34,8 @@ jobs:
           from selenium.webdriver.common.by import By
           from webdriver_manager.chrome import ChromeDriverManager
           import time
-          
+
+          # 앱 리스트 (공백 및 오타 완벽 제거)
           apps = [
               "https://style-scan-vip1.streamlit.app/",
               "https://bw-chef.streamlit.app/",
@@ -58,22 +63,33 @@ jobs:
           driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
           for app in apps:
-              print(f"--- 🚨 Force Waking: {app} ---")
+              print(f"\n--- 🚨 Force Waking: {app} ---")
               try:
                   driver.get(app)
-                  time.sleep(10) # 페이지 로딩 대기
+                  time.sleep(15)  # 페이지 로딩 대기 시간 소폭 증가
                   
-                  # "Yes, get this app back up!" 버튼 찾기 (여러가지 케이스 대비)
-                  buttons = driver.find_elements(By.XPATH, "//button[contains(text(), 'Yes')]")
-                  if buttons:
-                      buttons[0].click()
-                      print("   👉 Found the button and CLICKED it!")
-                      time.sleep(40) # 클릭 후 서버가 올라올 때까지 충분히 대기
-                  else:
-                      print("   ✅ App is already awake or button not found. Waiting 30s...")
-                      time.sleep(30)
+                  # "Yes, get this app back up!" 버튼 찾기
+                  # 텍스트뿐만 아니라 버튼 클래스로도 찾도록 개선
+                  found = False
+                  button_selectors = [
+                      "//button[contains(text(), 'Yes')]",
+                      "//button[contains(text(), 'back up')]",
+                      "//button[contains(@class, 'stButton')]"
+                  ]
+                  
+                  for selector in button_selectors:
+                      buttons = driver.find_elements(By.XPATH, selector)
+                      if buttons:
+                          buttons[0].click()
+                          print("   👉 Found the button and CLICKED it!")
+                          time.sleep(40) # 서버 부팅 대기
+                          found = True
+                          break
+                  
+                  if not found:
+                      print("   ✅ App is already awake or no button needed.")
+                      time.sleep(5)
                       
-                  print(f"--- Done with {app} ---")
               except Exception as e:
                   print(f"❌ Error on {app}: {e}")
 
