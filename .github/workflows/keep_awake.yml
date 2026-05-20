@@ -53,7 +53,8 @@ jobs:
               "https://anti-turtle-neck-ai.streamlit.app/",
               "https://oncolytic-virus.streamlit.app/",
               "https://multi-agent-dashboard.streamlit.app/",
-              "https://ibos-security-center.streamlit.app/"
+              "https://ibos-security-center.streamlit.app/",
+              "https://seoul-realty.streamlit.app/"
           ]
 
           options = Options()
