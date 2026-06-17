@@ -55,7 +55,8 @@ jobs:
               "https://multi-agent-dashboard.streamlit.app/",
               "https://ibos-security-center.streamlit.app/",
               "https://seoul-realty.streamlit.app/",
-              "https://datacenter-orbit.streamlit.app/"
+              "https://datacenter-orbit.streamlit.app/",
+              "https://gndo-data-factory.streamlit.app/"
           ]
 
           options = Options()
