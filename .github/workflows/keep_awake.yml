@@ -57,7 +57,8 @@ jobs:
               "https://seoul-realty.streamlit.app/",
               "https://datacenter-orbit.streamlit.app/",
               "https://gndo-data-factory.streamlit.app/",
-              "https://apr1400-licensing-copilot.streamlit.app/"
+              "https://apr1400-licensing-copilot.streamlit.app/",
+              "https://travel--assistant--ai.streamlit.app/"
           ]
 
           options = Options()
