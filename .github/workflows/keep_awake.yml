@@ -58,7 +58,8 @@ jobs:
               "https://datacenter-orbit.streamlit.app/",
               "https://gndo-data-factory.streamlit.app/",
               "https://apr1400-licensing-copilot.streamlit.app/",
-              "https://travel--assistant--ai.streamlit.app/"
+              "https://travel--assistant--ai.streamlit.app/",
+              "https://ai-music-dashboard.streamlit.app/"
           ]
 
           options = Options()
