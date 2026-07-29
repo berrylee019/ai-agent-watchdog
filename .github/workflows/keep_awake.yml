@@ -60,7 +60,8 @@ jobs:
               "https://apr1400-licensing-copilot.streamlit.app/",
               "https://travel--assistant--ai.streamlit.app/",
               "https://ai-music-dashboard.streamlit.app/",
-              "https://propview-ar.streamlit.app/"
+              "https://propview-ar.streamlit.app/",
+              "https://youtube-trend-collector.streamlit.app/"
           ]
 
           options = Options()
