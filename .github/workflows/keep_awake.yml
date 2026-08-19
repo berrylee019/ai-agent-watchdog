@@ -61,7 +61,8 @@ jobs:
               "https://travel--assistant--ai.streamlit.app/",
               "https://ai-music-dashboard.streamlit.app/",
               "https://propview-ar.streamlit.app/",
-              "https://youtube-trend-collector.streamlit.app/"
+              "https://youtube-trend-collector.streamlit.app/",
+              "https://ogl-tactile-sync.streamlit.app/"
           ]
 
           options = Options()
